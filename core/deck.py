@@ -18,6 +18,9 @@ class Deck:
     def __init__(self) -> None:
         self.__cards = []
 
+    def __len__(self) -> int:
+        return len(self.__cards)
+
     def shuffle(self) -> None:
         rng.shuffle(self.__cards)
         return self.__cards
@@ -40,3 +43,6 @@ class Deck:
     def __iter__(self):
         for item in self.__cards:
             yield item
+
+    def __contains__(self, card: 'card.Card') -> bool:
+        return card in self.__cards

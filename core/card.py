@@ -46,7 +46,7 @@ class Card:
                     )
 
         else:
-            raise NotImplementedError(
+            raise TypeError(
                     f'Card can be added to Card or int not {type(other)}'
                     )
 
@@ -62,7 +62,7 @@ class Card:
                     )
 
         else:
-            raise NotImplementedError(
+            raise TypeError(
                     f'Card can be added to Card or int not {type(other)}'
                     )
 

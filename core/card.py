@@ -34,7 +34,7 @@ class Card:
     def __str__(self) -> str:
         return f'{self.__value} {self.__color}'
 
-    def __add__(self, other: Optional['Card', int]) -> Union['Card', int]:
+    def __add__(self, other: Union['Card', int]) -> Union['Card', int]:
 
         if isinstance(other, int):
             return self.__value + other

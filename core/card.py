@@ -9,7 +9,7 @@ class Card:
 
     @property
     def value(self) -> int:
-        return self.__color
+        return self.__value
 
     @property
     def color(self) -> str:

@@ -46,3 +46,6 @@ class Deck:
 
     def __contains__(self, card: 'card.Card') -> bool:
         return card in self.__cards
+
+    def __getitem__(self, index: int) -> 'card.Card':
+        return self.__cards[index]

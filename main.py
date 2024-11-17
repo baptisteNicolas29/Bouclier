@@ -1,3 +1,4 @@
+from pprint import pprint
 from typing import List
 
 from core import deck
@@ -19,6 +20,4 @@ if __name__ == "__main__":
 
     cards = deck.Deck.generate_default_deck()
     # cards.shuffle()
-
-    for card in cards:
-        print(card)
+    pprint(list(cards))

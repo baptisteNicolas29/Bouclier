@@ -10,15 +10,26 @@ class Player:
 
         self.__name = name
 
-        self.__life: int = None
+        self.__life: int = 0
         self.life_card: card.Card = None
-        self.__shilds: List[card.Card] = None
+
+        self.__shield: int = 0
+        self.shield_cards: List[card.Card] = None
 
 
 if __name__ == "__main__":
 
-    cards = deck.Deck.generate_default_deck()
-    # cards.shuffle()
+    deck1 = deck.Deck.generate_default_deck()
+    deck2 = deck.Deck.generate_default_deck()
 
-    for card in cards:
+    deck1.shuffle()
+    deck2.shuffle()
+
+    new_deck = deck1 + deck2
+
+    print(f'{new_deck = }')
+    print(len(new_deck))
+
+    for card in new_deck:
         print(card)
+

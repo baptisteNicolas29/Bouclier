@@ -8,7 +8,7 @@ class Card:
 
     @property
     def value(self) -> int:
-        return self.__color
+        return self.__value
 
     @property
     def color(self) -> str:
@@ -16,7 +16,7 @@ class Card:
 
     @property
     def is_head(self) -> bool:
-        return self.__value >= 10
+        return self.__value > 10
 
     def __str__(self) -> str:
         return f'{self.__value} {self.__color}'

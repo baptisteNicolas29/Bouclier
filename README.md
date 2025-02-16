@@ -42,7 +42,7 @@ This repository is a simple integration of the card game "Shield".
 ```
 1. Declare an action to perform
 2. Designate an opponent
-3. Draw a card for the action (most actions require to draw a card)
+3. Draw a card for the action if necessary (most actions require to draw a card)
 4. Perform chosen action
 5. Put all used cards in the Discard Pile
 ```
@@ -98,4 +98,4 @@ Exemple Custom Action:
 - Numbers' values are equal to their card number (two of clubs equals 2)
 - Jacks' value equals 11
 - Queens' value equals 12
-- Kings' value equals 12
+- Kings' value equals 13

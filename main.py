@@ -32,4 +32,3 @@ if __name__ == "__main__":
 
     for card in new_deck:
         print(card)
-

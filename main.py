@@ -8,7 +8,7 @@ def main(player_names):
     :param player_names: List[str], the list of player names
     """
 
-    board.Board.start_a_game(new_player_names)
+    board.Board.start_a_game(player_names)
 
 
 if __name__ == "__main__":

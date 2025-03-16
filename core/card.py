@@ -4,13 +4,14 @@ class Card(object):
     __doc__ = """
     Simple playing card object implementation for the Shield game.
     Card can hold a value and a color.
-    It can also hold a head limit threshold,
-    any value over this threshold is considered a head card.
+    It can also hold a face card limit threshold,
+    any value over this threshold is considered a face card.
     """
 
-    head_threshold = 11
+    # Threshold to count a value as a face card
+    face_card = 11
 
-    # ASCII symbols for card colors
+    # ASCII symbols for default card colors
     color_symbols = {
         'clubs': '♣',
         'diamonds': '♦',
@@ -45,22 +46,23 @@ class Card(object):
         return self.__color
 
     @property
-    def is_head(self) -> bool:
+    def is_face(self) -> bool:
         """
-        Whether the card if considered a head or not
-        :return: bool, is the card a head
+        Whether the card if considered a face card or not
+        :return: bool, is the card a face card
         """
-        return self.__value >= Card.head_threshold
+        return self.__value >= Card.face_card
 
     def __str__(self) -> str:
         """
         String representation of the Card
         """
-        error = f'SYMBOL NOT FOUND FOR COLOR -> {self.__color}'
-        value, color = self.__value, self.color_symbols.get(self.__color, error)
+        value = self.__value
+        # if no symbols are found, just show the color string
+        color = self.color_symbols.get(self.__color, self.__color)
         return f'{value} {color}'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         String representation of the Card object
         """

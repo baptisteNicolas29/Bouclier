@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import itertools
 import random as rng
 
@@ -17,14 +17,19 @@ class Board(object):
     """
 
     # default player actions for the game
-    __actions = ['Attack', 'Charge', 'Swap', 'Custom']
+    __default_actions = ['Attack', 'Charge', 'Swap', 'Custom']
 
     @classmethod
-    def start_a_game(cls, player_names) -> None:
+    def start_a_game(
+            cls, 
+            player_names: List[str], 
+            custom_deck: Optional[deck.Deck] = None
+    ) -> None:
         """
         Set up the game and starts the game loop, given player names
 
         :param player_names: List[str], the list of player names
+        :param custom_deck: Optional[deck.Deck], a Deck to play the game
         """
         players = []
         for player_name in player_names:
@@ -32,7 +37,7 @@ class Board(object):
 
         rng.shuffle(players)
 
-        board = cls(players)
+        board = cls(players, custom_deck=custom_deck)
         board.turn_tracker = 0
         board.distribute_health_card_to_all_players()
         board.distribute_shield_cards_to_all_players()
@@ -43,17 +48,26 @@ class Board(object):
             last_player = board.players[0].name
             print(f'WINNER IS {last_player.upper()}, CONGRATULATIONS!')
 
-    def __init__(self, players : List[player.Player]) -> None:
+    def __init__(
+            self,
+            players : List[player.Player],
+            custom_deck: Optional[deck.Deck] = None
+    ) -> None:
         """
         Initialize a Board object given Players
 
         :param players: List[player.Player], a list of Players to play the game
+        :param custom_deck: Optional[deck.Deck], a Deck to play the game
         """
 
         # Assert all players are of type player.Player
         assert all(isinstance(p, player.Player) for p in players), (
-            f'Board needs List[player.Player], '
+            f'Board expected List[player.Player], '
             f'\n\tGOT {[p.__class__.__name__ for p in players]}'
+        )
+        # Assert custom Deck is of type deck.Deck or None
+        assert isinstance(custom_deck, Optional[deck.Deck]), (
+            f'Board expected deck.Deck or None, \n\tGOT {type(custom_deck)}'
         )
 
         self.__turn_tracker = itertools.cycle(list(range(len(players))))
@@ -61,7 +75,7 @@ class Board(object):
         self.__players = players
         self.__current_player = None
 
-        self.__deck = deck.Deck.generate_default_deck()
+        self.__deck = custom_deck or deck.Deck.generate_default_deck()
         self.__deck.shuffle()
 
         self.__discard_pile = deck.Deck()
@@ -119,9 +133,11 @@ class Board(object):
         for player_obj in self.__players:
             self.distribute_health_card(player_obj)
 
-    def distribute_health_card(self, player_obj) -> None:
+    def distribute_health_card(self, player_obj: player.Player) -> None:
         """
         Distributes Cards to a  given Players to serve as health
+
+        :param player_obj: : player.Player, a Player to distribute a Card to
         """
 
         player_obj.life_card = self.__deck.draw()
@@ -134,15 +150,17 @@ class Board(object):
         for player_obj in self.__players:
             self.distribute_shield_cards(player_obj)
 
-    def distribute_shield_cards(self, player_obj) -> None:
+    def distribute_shield_cards(self, player_obj: player.Player) -> None:
         """
         Distributes Cards to a  given Players to serve as shield
+
+        :param player_obj: : player.Player, a Player to distribute Cards to
         """
 
         player_obj.shield_cards = [self.__deck.draw() for _ in range(2)]
 
     # GAME ACTIONS
-    def attack(self, player1, player2) -> None:
+    def attack(self, player1: player.Player, player2: player.Player) -> None:
         """
         Perform the Attack action from one Player to another
 
@@ -186,7 +204,7 @@ class Board(object):
             self.distribute_shield_cards(player2)
             print(f' -> {player2.life = }\n- {player2.shield = }')
 
-    def charge(self, player1) -> None:
+    def charge(self, player1: player.Player) -> None:
         """
         Perform the charge action for given Player
 
@@ -199,7 +217,7 @@ class Board(object):
         print(f'{player1.name.upper()} is charging an attack card')
         player1.charged_cards = self.deck.draw()
 
-    def swap(self, player1, player2) -> None:
+    def swap(self, player1: player.Player, player2: player.Player) -> None:
         """
         Perform the swap action for given Player.
 
@@ -233,9 +251,13 @@ class Board(object):
         player2.shield_cards = new_shield
 
     # GAME LOOP
-    def choose_player(self, player1, full=False) -> player.Player:
+    def choose_player(
+            self,
+            player1: player.Player,
+            full: bool = False
+    ) -> player.Player:
         """
-        Choose a Player
+        Choose a Player from the current Player list
 
         :param player1: player.Player, the Player making the choice
         :param full: bool, whether to include the current Player in the choice
@@ -254,9 +276,10 @@ class Board(object):
         )
         return player_copy[int(player_choice)]
 
-    def update_players(self, player_index) -> None:
+    def update_players(self, player_index: int) -> None:
         """
         Update Player's list at the end of a turn if an update is needed
+
         If a Player has a life total less than 0, they are removed from the game
         Updates the __turn_tracker
         :param player_index: int, the current Player index
@@ -280,12 +303,14 @@ class Board(object):
         for i in range(player_index+1):
             next(self.__turn_tracker)
 
-    def choose_action(self):
+    def choose_action(self) -> bool:
         """
         Choose the action for the current Player turn
+
+        :return bool, whether the Player list needs an update after an attack
         """
         action_mssg = f'\n\t'.join(
-            f'-> {k}-{v}' for k, v in enumerate(self.__actions)
+            f'-> {k}-{v}' for k, v in enumerate(self.__default_actions)
         )
 
         action = int(input(

@@ -1,7 +1,9 @@
+from typing import List, AnyStr
+
 from core import board
 
 
-def main(player_names):
+def main(player_names: List[AnyStr]):
     """
     Main function to start a game of Shield
 
@@ -13,10 +15,11 @@ def main(player_names):
 
 if __name__ == "__main__":
 
+    # A list of TOTALY random names
     new_player_names = [
         'lucas', 'julie', 'baptiste',
         'alan', 'olivier', 'morgane',
-        'francois'
+        'francois', 'coline'
     ]
 
     main(new_player_names)

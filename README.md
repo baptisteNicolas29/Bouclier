@@ -1,15 +1,59 @@
-
 # Description:
 
-This repository is a simple integration of the card game "Shield".
-
+This repository is a simple integration of the card game "Bouclier" ("Shield" in French).
 
 **Number of players:** 2+ (funnier with 4+ players)
 
 **Material:** a deck of playing cards (standard 52 card deck is nice)
 
 
-# Set up the Game:
+# How to Launch:
+## Classic Game, 52 card playing deck:
+```python
+import random as rng
+from Bouclier.core import main
+
+# 8 players -> it s a pretty long game
+list_of_players = [
+    'lucas', 'julie', 'baptiste',
+    'alan', 'olivier', 'morgane',
+    'francois', 'coline'
+]
+
+# optionally shuffle the player list to play in random order
+# rng.shuffle(list_of_players)
+
+# This starts a game of Shield with 5 Players and a 52 card Deck
+main.main(list_of_players)
+```
+## Custom Game, with custom playing deck:
+```python
+import random as rng
+from Bouclier.core import board, deck
+
+# 8 players -> it s a pretty long game
+list_of_players = [
+    'lucas', 'julie', 'baptiste',
+    'alan', 'olivier', 'morgane',
+    'francois', 'coline'
+]
+
+# optionally shuffle the player list to play in random order
+# rng.shuffle(list_of_players)
+
+value_range = range(1, 30)
+color_list = ['rock', 'paper', 'scissors', 'lizard', 'spock']
+
+custom_deck = deck.Deck.generate_deck(value_range, color_list)
+
+# This starts a game of Shield with 5 Players and a 116 card Deck
+board.Board.start_a_game(list_of_players, custom_deck=custom_deck)
+```
+
+---
+
+# How To Play IRL:
+## Set up the Game:
 ```
 1. Each player is distributed a "Life" card. 
     The value of this card represents their life total for the current round of the game.
@@ -23,7 +67,7 @@ This repository is a simple integration of the card game "Shield".
 ```
 
 
-# Rules:
+## Game Rules:
 ```
 1. The goal of the game is to bring opponent's Life total down to zero to remove them from the current round.
 
@@ -38,7 +82,7 @@ This repository is a simple integration of the card game "Shield".
 5. If the deck of cards (aka: Draw Pile) is empty (the last card of the deck was used). 
     Shuffle the Discard Pile and use it as Draw Pile.
 ```
-# Player Turn:
+## Player Turn:
 ```
 1. Declare an action to perform
 2. Designate an opponent
@@ -47,7 +91,7 @@ This repository is a simple integration of the card game "Shield".
 5. Put all used cards in the Discard Pile
 ```
 
-# Actions:
+## Actions:
 - ### Attack:
 ```
 To Attack: 
@@ -92,7 +136,7 @@ Exemple Custom Action:
     2. If a player has a Shield card of the color Hearts they can swap it with their Life card 
 ```
 
-# Miscellaneous Info:
+## Miscellaneous Info:
 ### In a standard 52 card deck:
 - Aces' value equals 1
 - Numbers' values are equal to their card number (two of clubs equals 2)

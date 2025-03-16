@@ -1,5 +1,5 @@
 import random as rng
-from typing import List
+from typing import List, Optional
 
 from core import card
 
@@ -14,6 +14,9 @@ class Deck(object):
         -> generate_deck(value_range, color_list), for a custom deck
     """
 
+    __default_range = range(1, 14)
+    __default_colors = ['spades', 'clubs', 'hearts', 'diamonds']
+
     @classmethod
     def generate_default_deck(cls) -> 'Deck':
         """
@@ -21,17 +24,19 @@ class Deck(object):
 
         :return: Deck, and instance of the object
         """
-        color_list = ['spades', 'clubs', 'hearts', 'diamonds']
-        value_range = range(1, 14)
 
-        return Deck.generate_deck(value_range, color_list)
+        return Deck.generate_deck(cls.__default_range, cls.__default_colors)
 
     @classmethod
-    def generate_deck(cls, value_range: range, color_list: List[str]) -> 'Deck':
+    def generate_deck(
+            cls,
+            value_range: range | List[int],
+            color_list: List[str]
+    ) -> 'Deck':
         """
         Generate a Deck object using given values and colors
 
-        :param value_range: range, the range of values for the new deck
+        :param value_range: range, the range of values for each color
         :param color_list: list[str], the list of colors for the new deck
 
         :return: Deck, and instance of the object
@@ -39,13 +44,13 @@ class Deck(object):
 
         cards = [
             card.Card(value, color)
-            for value in value_range
             for color in color_list
+            for value in value_range
         ]
 
         return cls(cards)
 
-    def __init__(self, cards: List[card.Card] = None) -> None:
+    def __init__(self, cards: Optional[List[card.Card]] = None) -> None:
         """
         Initialize Deck object
 
@@ -64,7 +69,7 @@ class Deck(object):
         return self.__cards
 
     @cards.setter
-    def cards(self, card_list) -> None:
+    def cards(self, card_list: List[card.Card]) -> None:
         """
         Setter for the cards property
 
@@ -216,7 +221,7 @@ class Deck(object):
         for item in self.__cards:
             yield item
 
-    def __len__(self):
+    def __len__(self) -> int:
         """
         The length of the Deck
 
@@ -233,7 +238,7 @@ class Deck(object):
         card_pile, discard_pile = len(self.__cards), len(self.__discard_pile)
         return f'Deck - {card_pile=}, {discard_pile=}'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Representation of the Deck object
 
@@ -251,6 +256,9 @@ class Deck(object):
 if __name__ == '__main__':
 
     deck = Deck.generate_default_deck()
+    # values = [i for i in range(1, 20, 2)]
+    # colors = [str(i) for i in range(0, 4)]
+    # deck = Deck.generate_deck(values, colors)
 
     help(deck)
     print(deck.__repr__())

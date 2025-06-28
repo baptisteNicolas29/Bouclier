@@ -9,10 +9,10 @@ class Card(object):
     """
 
     # Threshold to count a value as a face card
-    face_card = 11
+    face_card: int = 11
 
     # ASCII symbols for default card colors
-    color_symbols = {
+    color_symbols: dict = {
         'clubs': '♣',
         'diamonds': '♦',
         'hearts': '♥',
@@ -26,8 +26,8 @@ class Card(object):
         :param value: int, an integer value
         :param color: str, a string representing the color
         """
-        self.__value = value
-        self.__color = color
+        self.__value: int = value
+        self.__color: str = color
 
     @property
     def value(self) -> int:
@@ -57,16 +57,17 @@ class Card(object):
         """
         String representation of the Card
         """
-        value = self.__value
+        value: int = self.__value
         # if no symbols are found, just show the color string
-        color = self.color_symbols.get(self.__color, self.__color)
+        color: str = self.color_symbols.get(self.__color, self.__color)
         return f'{value} {color}'
 
     def __repr__(self) -> str:
         """
         String representation of the Card object
         """
-        value, color = self.value, self.color
+        value: int = self.value
+        color: str = self.color
         return f'{self.__class__.__name__}({value}, "{color}")'
 
 
@@ -75,5 +76,5 @@ if __name__ == '__main__':
     card = Card(10, 'hearts')
 
     help(card)
-    print(card.__repr__())
+    print(repr(card))
     print(card)

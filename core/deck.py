@@ -14,8 +14,8 @@ class Deck(object):
         -> generate_deck(value_range, color_list), for a custom deck
     """
 
-    __default_range = range(1, 14)
-    __default_colors = ['spades', 'clubs', 'hearts', 'diamonds']
+    __default_range: range = range(1, 14)
+    __default_colors: List[str] = ['spades', 'clubs', 'hearts', 'diamonds']
 
     @classmethod
     def generate_default_deck(cls) -> 'Deck':
@@ -42,7 +42,7 @@ class Deck(object):
         :return: Deck, and instance of the object
         """
 
-        cards = [
+        cards: List[card.Card] = [
             card.Card(value, color)
             for color in color_list
             for value in value_range
@@ -56,8 +56,8 @@ class Deck(object):
 
         Use class methods to initialize a Deck
         """
-        self.__cards = cards or []
-        self.__discard_pile = []
+        self.__cards: List = cards or []
+        self.__discard_pile: List = []
 
     @property
     def cards(self) -> List[card.Card]:
@@ -78,7 +78,7 @@ class Deck(object):
         if not isinstance(card_list, List):
             raise TypeError(f'Cards must be a list, got {type(card_list)} instead, aborting...')
 
-        self.__cards = card_list
+        self.__cards: List[card.Card] = card_list
 
     @property
     def discard_pile(self) -> List[card.Card]:
@@ -102,7 +102,7 @@ class Deck(object):
                 f'aborting...'
             )
 
-        self.__discard_pile = card_list
+        self.__discard_pile: List[card.Card] = card_list
 
     def discard(self, item: card.Card) -> None:
         """
@@ -134,11 +134,11 @@ class Deck(object):
 
         # cycle drawable cards from the discard pile
         if len(self.__cards)==0 and cycle:
-            self.__cards = self.__discard_pile.copy()
+            self.__cards: List[card.Card] = self.__discard_pile.copy()
             self.__discard_pile.clear()
             self.shuffle()
 
-        item = self.__cards.pop(0)
+        item: card.Card = self.__cards.pop(0)
         self.__discard_pile.append(item)
 
         return item
@@ -206,7 +206,7 @@ class Deck(object):
         :param other: Deck, the second Deck to add
         :return: Deck, the resulting Deck object
         """
-        new_deck = Deck()
+        new_deck: Deck = Deck()
         new_deck.cards = self.cards + other.cards
         new_deck.discard_pile = self.discard_pile + other.discard_pile
 
@@ -235,7 +235,8 @@ class Deck(object):
 
         :return: str, string representing the current Deck
         """
-        card_pile, discard_pile = len(self.__cards), len(self.__discard_pile)
+        card_pile: int = len(self.__cards)
+        discard_pile: int = len(self.__discard_pile)
         return f'Deck - {card_pile=}, {discard_pile=}'
 
     def __repr__(self) -> str:
@@ -244,8 +245,9 @@ class Deck(object):
 
         :return: str, string representing the current Deck object
         """
-        card_pile, discard_pile = self.__cards, self.__discard_pile
-        repr_str = (
+        card_pile: List[card.Card] = self.__cards
+        discard_pile: List[card.Card] = self.__discard_pile
+        repr_str: str = (
             f'deck = {self.__class__.__name__}()'
             f'\ndeck.{card_pile = }'
             f'\ndeck.{discard_pile = }'

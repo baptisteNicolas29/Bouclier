@@ -17,7 +17,7 @@ class Board(object):
     """
 
     # default player actions for the game
-    __default_actions = ['Attack', 'Charge', 'Swap', 'Custom']
+    __default_actions: list[str] = ['Attack', 'Charge', 'Swap', 'Custom']
 
     @classmethod
     def start_a_game(
@@ -31,13 +31,13 @@ class Board(object):
         :param player_names: List[str], the list of player names
         :param custom_deck: Optional[deck.Deck], a Deck to play the game
         """
-        players = []
+        players: list = []
         for player_name in player_names:
             players.append(player.Player(player_name))
 
         rng.shuffle(players)
 
-        board = cls(players, custom_deck=custom_deck)
+        board: cls = cls(players, custom_deck=custom_deck)
         board.turn_tracker = 0
         board.distribute_health_card_to_all_players()
         board.distribute_shield_cards_to_all_players()
@@ -45,8 +45,8 @@ class Board(object):
         while len(board.players) > 1:
             board.take_turn()
         else:
-            last_player = board.players[0].name
-            print(f'WINNER IS {last_player.upper()}, CONGRATULATIONS!')
+            last_player: str = board.players[0].name
+            print(f'WINNER IS {last_player.upper()}, CONGRATULATIONS!!!')
 
     def __init__(
             self,
@@ -70,15 +70,15 @@ class Board(object):
             f'Board expected deck.Deck or None, \n\tGOT {type(custom_deck)}'
         )
 
-        self.__turn_tracker = itertools.cycle(list(range(len(players))))
+        self.__turn_tracker: itertools.cycle[int] = itertools.cycle(list(range(len(players))))
 
-        self.__players = players
-        self.__current_player = None
+        self.__players: list[player.Player] = players
+        self.__current_player: Optional[player.Player] = None
 
-        self.__deck = custom_deck or deck.Deck.generate_default_deck()
+        self.__deck: deck.Deck = custom_deck or deck.Deck.generate_default_deck()
         self.__deck.shuffle()
 
-        self.__discard_pile = deck.Deck()
+        self.__discard_pile: deck.Deck = deck.Deck()
 
     @property
     def players(self) -> List[player.Player]:
@@ -116,7 +116,7 @@ class Board(object):
         """
         print(f'{"-" * 10}')
 
-        show_info = input('Show Player Infos? (Y/N) :')
+        show_info: str = input('Show Player Infos? (Y/N) :')
         if not show_info.lower() =='y':
             f'\n{"-" * 10}'
             return
@@ -172,9 +172,9 @@ class Board(object):
         """
 
         # Count the attack value
-        attack_card = self.deck.draw()
-        charged_value = player1.charge
-        attack_value = attack_card.value + charged_value
+        attack_card: deck.card.Card = self.deck.draw()
+        charged_value: int = player1.charge
+        attack_value: int = attack_card.value + charged_value
         player1.reset_charges()
 
         print(
@@ -182,7 +182,7 @@ class Board(object):
             f'{player2.name.upper()} for {attack_value}'
         )
         # Count the remainder after shield calculations
-        remainder = player2.shield - attack_value
+        remainder: int = player2.shield - attack_value
         print(
             f' -> Hit {player2.name.upper()}\'s Shield: {player2.shield} '
             f'- {attack_value} = {remainder}'
@@ -192,7 +192,7 @@ class Board(object):
             player2.shield = remainder
 
         else:
-            life_copy = player2.life
+            life_copy: int = player2.life
             player2.life += remainder
 
             print(
@@ -227,21 +227,21 @@ class Board(object):
         :param player1: player.Player, the swapping Player.
         :param player2: player.Player, the swapped Player.
         """
-        swap_card = self.deck.draw()
+        swap_card: deck.card.Card = self.deck.draw()
 
-        copy_cards = player2.shield_cards.copy()
-        swap_mssg = '\n\t'.join(
+        copy_cards: list[deck.card.Card] = player2.shield_cards.copy()
+        swap_mssg: str = '\n\t'.join(
             f'-> {k}-{v}' for k, v in enumerate(copy_cards)
         )
 
-        card_choice = int(input(
+        card_choice: int = int(input(
             f'Choose a shield card to swap:\n\t{swap_mssg}\nChoice:'
         ))
         print(
             f'{player1.name.upper()} is swapping {player2.name.upper()} shield:'
             f'\n\tFrom {copy_cards[card_choice]} to {swap_card}'
         )
-        new_shield = []
+        new_shield: list = []
         for i, card in enumerate(player2.shield_cards):
             if i == card_choice:
                 new_shield.append(swap_card)
@@ -263,15 +263,15 @@ class Board(object):
         :param full: bool, whether to include the current Player in the choice
         :return: player.Player, the chosen Player
         """
-        player_copy = self.players.copy()
+        player_copy: list[player.Player] = self.players.copy()
 
         if not full:
             player_copy.remove(player1)
 
-        player_mssg = '\n\t'.join(
+        player_mssg: str = '\n\t'.join(
             f'-> {k}-{v.name}' for k, v in enumerate(player_copy)
         )
-        player_choice = input(
+        player_choice: str = input(
             f'Choose an opponent :\n\t{player_mssg}\nChoice:'
         )
         return player_copy[int(player_choice)]
@@ -285,11 +285,11 @@ class Board(object):
         :param player_index: int, the current Player index
         """
 
-        is_before = True
+        is_before: bool = True
         for i, player_obj in enumerate(reversed(self.__players)):
 
             if i > player_index:
-                is_before = False
+                is_before: bool = False
 
             if player_obj.life > 0:
                 continue
@@ -307,28 +307,28 @@ class Board(object):
         """
         Choose the action for the current Player turn
 
-        :return bool, whether the Player list needs an update after an attack
+        :return bool: whether the Player list needs an update after an attack
         """
-        action_mssg = f'\n\t'.join(
+        action_mssg:str = f'\n\t'.join(
             f'-> {k}-{v}' for k, v in enumerate(self.__default_actions)
         )
 
-        action = int(input(
+        action: int = int(input(
             f'\n{self.current_player.name} - '
             f'Choose an action number :\n\t{action_mssg}\nChoice:'
         ))
 
-        need_update = False
+        need_update: bool = False
         if action == 0:  # attack
-            attacked_player = self.choose_player(self.current_player)
+            attacked_player: player.Player = self.choose_player(self.current_player)
             self.attack(self.current_player, attacked_player)
-            need_update = attacked_player.life <= 0
+            need_update: bool = attacked_player.life <= 0
 
         elif action == 1:  # charge
             self.charge(self.current_player)
 
         elif action == 2:  # swap shield
-            swap_player = self.choose_player(self.current_player, full=True)
+            swap_player: player.Player = self.choose_player(self.current_player, full=True)
             self.swap(self.current_player, swap_player)
 
         elif action == 3:
@@ -343,10 +343,10 @@ class Board(object):
         """
         self.show_player_infos()
 
-        current_player_index = next(self.__turn_tracker)
-        self.__current_player = self.players[current_player_index]
+        current_player_index: int = next(self.__turn_tracker)
+        self.__current_player: player.Player = self.players[current_player_index]
 
-        need_update = self.choose_action()
+        need_update:bool = self.choose_action()
 
         if need_update:
             self.update_players(current_player_index)

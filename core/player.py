@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 
 from core import card
 
@@ -17,7 +17,7 @@ class Player:
         :param name: str, the name of the new player
         """
 
-        self.__name = name.capitalize()
+        self.__name: str = name.capitalize()
 
         self.__life: int = 0
         self.__life_card: card.Card | None = None
@@ -53,7 +53,7 @@ class Player:
 
         :param value: int, the value serving as life total
         """
-        self.__life = value
+        self.__life: int = value
 
     @property
     def life_card(self) -> card.Card:
@@ -73,8 +73,8 @@ class Player:
 
         :param item: card.Card, the Card serving as life total
         """
-        self.__life_card = item
-        self.__life = item.value
+        self.__life_card: card.Card = item
+        self.__life: int = item.value
 
     @property
     def shield(self) -> int:
@@ -92,7 +92,7 @@ class Player:
 
         :param value: int, The value of the new shield
         """
-        self.__shield = value
+        self.__shield: int = value
 
     @property
     def shield_cards(self) -> List[card.Card]:
@@ -112,8 +112,8 @@ class Player:
 
         :param items: List[card.Card], a list of Cards to serve as shield_cards
         """
-        self.__shield_cards = items
-        self.__shield = sum(item.value for item in items)
+        self.__shield_cards: List[card.Card] = items
+        self.__shield: int = sum(item.value for item in items)
 
     @property
     def charge(self) -> int:
@@ -149,8 +149,8 @@ class Player:
         """
         Reset the currently held charged attacks
         """
-        self.__charged_cards = []
-        self.__charge = 0
+        self.__charged_cards: List = []
+        self.__charge: int = 0
 
     def show_info(self) -> List:
         """
@@ -160,7 +160,7 @@ class Player:
         :return list, list holding the player's current information
         """
 
-        player_data = [
+        player_data: List[Any] = [
             self.name,
             self.life, self.life_card,
             self.shield, self.shield_cards
@@ -183,10 +183,10 @@ class Player:
         :return: str, string representing the current Player
         """
 
-        player_string = (
+        player_string: str = (
             f"Player - name={self.name}, "
             f"life={self.life}, life_cards={self.life_card}, "
-            f"shield={self.shield}, shield_cards={self.shield_cards}"
+            f"shield={self.shield}, shield_cards={self.shield_cards}, "
             f"charge={self.charge}, charged_cards={self.charged_cards}"
         )
 
@@ -199,9 +199,9 @@ class Player:
         :return: str, string representing the current Player object
         """
 
-        life_card = self.life_card
-        shield_cards = self.shield_cards
-        charged_cards = self.charged_cards
+        life_card: card.Card = self.life_card
+        shield_cards: List[card.Card] = self.shield_cards
+        charged_cards : List[card.Card] = self.charged_cards
         repr_str = (
             f'player = {self.__class__.__name__}({self.name})'
             f'\nplayer.{life_card = }'

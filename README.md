@@ -4,7 +4,7 @@ This repository is a simple integration of the card game "Bouclier" ("Shield" in
 
 **Number of players:** 2+ (funnier with 4+ players)
 
-**Material:** a deck of playing cards (standard 52 card deck is nice)
+**Material:** a deck of playing cards (standard 52 cards deck is nice)
 
 
 # How to Launch:
@@ -21,9 +21,9 @@ list_of_players = [
 ]
 
 # optionally shuffle the player list to play in random order
-# rng.shuffle(list_of_players)
+rng.shuffle(list_of_players)
 
-# This starts a game of Shield with 5 Players and a 52 card Deck
+# This starts a game of Shield with 8 Players and a 52 card Deck
 main.main(list_of_players)
 ```
 ## Custom Game, with custom playing deck:
@@ -39,14 +39,14 @@ list_of_players = [
 ]
 
 # optionally shuffle the player list to play in random order
-# rng.shuffle(list_of_players)
+rng.shuffle(list_of_players)
 
 value_range = range(1, 30)
 color_list = ['rock', 'paper', 'scissors', 'lizard', 'spock']
 
 custom_deck = deck.Deck.generate_deck(value_range, color_list)
 
-# This starts a game of Shield with 5 Players and a 116 card Deck
+# This starts a game of Shield with 8 Players and a 116 card Deck
 board.Board.start_a_game(list_of_players, custom_deck=custom_deck)
 ```
 
@@ -85,7 +85,7 @@ board.Board.start_a_game(list_of_players, custom_deck=custom_deck)
 ## Player Turn:
 ```
 1. Declare an action to perform
-2. Designate an opponent
+2. Designate an opponent (or yourself for some actions)
 3. Draw a card for the action if necessary (most actions require to draw a card)
 4. Perform chosen action
 5. Put all used cards in the Discard Pile
@@ -97,7 +97,7 @@ board.Board.start_a_game(list_of_players, custom_deck=custom_deck)
 To Attack: 
   1. Designate an opponent to attack
   2. Draw a card (aka: Attack card)
-  3. Add any "Charged Attack" cards' value to the Attack card's value
+  3. Add any "Charged Attack" cards's value to the Attack card's value
   4. Subtract the value of the Attack from the opponent's Shield value
   5. If the Shield value is more than the Attack value,
     the new Shield value equals the rest of the Shield after the subtraction (new Shield = Shield - Attack)
@@ -108,9 +108,9 @@ To Attack:
 - ### Charge an Attack:
 ```
 To Charge an Attack: 
-  1. Draw a card without looking at it (aka: Charged Attack)
+  1. Draw a card without looking at it or showing it (aka: Charged Attack)
   2. Put it face down next to the Life total card
-  3. Any charged cards are used when an Attack is declared
+  3. All charged cards are used when an Attack is declared
 ```
 > If a player takes Damage to their life total (at least 1 Damage passed through the Player's Shield), 
 > all that player's Charged Attacks are lost (put them into the Discard Pile)
@@ -119,7 +119,7 @@ To Charge an Attack:
 To Swap Player's Shield: 
   1. Designate one of the Shield cards of a player (current player or opponent)
   2. Draw a card
-  3. Replace the chosen Shield card with the drawn card
+  3. Replace the chosen Shield card with the drawn card (old Shield card goes into the Discard Pile)
 ```
 - ### Custom Action / Custom Rules:
 ```
